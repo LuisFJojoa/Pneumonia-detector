@@ -1,3 +1,7 @@
+## Curso - Desarrollo de proyectos de IA
+
+Entrega preliminar a cargo de Luis Fernando Jojoa Quintero
+
 ## Hola! Bienvenido a la herramienta para la detección rápida de neumonía
 
 Deep Learning aplicado en el procesamiento de imágenes radiográficas de tórax en formato DICOM con el fin de clasificarlas en 3 categorías diferentes:
