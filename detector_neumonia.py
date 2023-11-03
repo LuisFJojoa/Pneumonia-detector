@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import cv2
 
 from tkinter import *
 from tkinter import ttk, font, filedialog, Entry
 
+from keras import backend as K
+import pydicom
 from tkinter.messagebox import askokcancel, showinfo, WARNING
 import getpass
 from PIL import ImageTk, Image
@@ -13,9 +16,11 @@ import tkcap
 import img2pdf
 import numpy as np
 import time
+
+import tensorflow as tf
 tf.compat.v1.disable_eager_execution()
 tf.compat.v1.experimental.output_all_intermediates(True)
-import cv2
+
 
 
 def grad_cam(array):
@@ -52,7 +57,6 @@ def predict(array):
     batch_array_img = preprocess(array)
     #   2. call function to load model and predict: it returns predicted class and probability
     model = model_fun()
-    # model_cnn = tf.keras.models.load_model('conv_MLP_84.h5')
     prediction = np.argmax(model.predict(batch_array_img))
     proba = np.max(model.predict(batch_array_img)) * 100
     label = ""
@@ -66,9 +70,11 @@ def predict(array):
     heatmap = grad_cam(array)
     return (label, proba, heatmap)
 
+def model_fun():
+    return tf.keras.models.load_model('conv_MLP_84.h5')
 
 def read_dicom_file(path):
-    img = dicom.read_file(path)
+    img = pydicom.dcmread(path)
     img_array = img.pixel_array
     img2show = Image.fromarray(img_array)
     img2 = img_array.astype(float)
@@ -102,25 +108,26 @@ def preprocess(array):
 class App:
     def __init__(self):
         self.root = Tk()
-        self.root.title("Herramienta para la detección rápida de neumonía")
+        self.root.title("Sfotware for rapid detection of pneumonia")
 
         #   BOLD FONT
         fonti = font.Font(weight="bold")
 
-        self.root.geometry("815x560")
+        self.root.geometry("1015x650")
         self.root.resizable(0, 0)
 
         #   LABELS
-        self.lab1 = ttk.Label(self.root, text="Imagen Radiográfica", font=fonti)
-        self.lab2 = ttk.Label(self.root, text="Imagen con Heatmap", font=fonti)
-        self.lab3 = ttk.Label(self.root, text="Resultado:", font=fonti)
-        self.lab4 = ttk.Label(self.root, text="Cédula Paciente:", font=fonti)
+        self.lab1 = ttk.Label(self.root, text="X Ray Image", font=fonti)
+        self.lab2 = ttk.Label(self.root, text="Heatmap Image", font=fonti)
+        # self.lab3 = ttk.Label(self.root, text="Result:", font=fonti)
+        self.lab4 = ttk.Label(self.root, text="Personal ID:", font=fonti)
         self.lab5 = ttk.Label(
             self.root,
-            text="SOFTWARE PARA EL APOYO AL DIAGNÓSTICO MÉDICO DE NEUMONÍA",
+            text="SOFTWARE TO SUPPORT THE MEDICAL DIAGNOSIS OF PNEUMONIA",
             font=fonti,
         )
-        self.lab6 = ttk.Label(self.root, text="Probabilidad:", font=fonti)
+        self.lab6 = ttk.Label(self.root, text="Accuracy:", font=fonti)
+        self.lab7 = ttk.Label(self.root, text="Status:", font=fonti)
 
         #   TWO STRING VARIABLES TO CONTAIN ID AND RESULT
         self.ID = StringVar()
@@ -140,34 +147,35 @@ class App:
 
         #   BUTTONS
         self.button1 = ttk.Button(
-            self.root, text="Predecir", state="disabled", command=self.run_model
+            self.root, text="Predict", state="disabled", command=self.run_model
         )
         self.button2 = ttk.Button(
-            self.root, text="Cargar Imagen", command=self.load_img_file
+            self.root, text="Load X Ray image", command=self.load_img_file
         )
         self.button3 = ttk.Button(self.root, text="Borrar", command=self.delete)
-        self.button4 = ttk.Button(self.root, text="PDF", command=self.create_pdf)
-        self.button6 = ttk.Button(
-            self.root, text="Guardar", command=self.save_results_csv
-        )
+        # self.button4 = ttk.Button(self.root, text="PDF", command=self.create_pdf)
+        # self.button6 = ttk.Button(
+        #     self.root, text="Guardar", command=self.save_results_csv
+        # )
 
         #   WIDGETS POSITIONS
-        self.lab1.place(x=110, y=65)
-        self.lab2.place(x=545, y=65)
-        self.lab3.place(x=500, y=350)
+        self.lab1.place(x=160, y=65)
+        self.lab2.place(x=680, y=65)
+        # self.lab3.place(x=650, y=530)
         self.lab4.place(x=65, y=350)
-        self.lab5.place(x=122, y=25)
-        self.lab6.place(x=500, y=400)
-        self.button1.place(x=220, y=460)
-        self.button2.place(x=70, y=460)
-        self.button3.place(x=670, y=460)
-        self.button4.place(x=520, y=460)
-        self.button6.place(x=370, y=460)
-        self.text1.place(x=200, y=350)
-        self.text2.place(x=610, y=350, width=90, height=30)
-        self.text3.place(x=610, y=400, width=90, height=30)
+        self.lab5.place(x=160, y=25)
+        self.lab6.place(x=650, y=430)
+        self.lab7.place(x=650, y=480)
+        self.button1.place(x=220, y=600)
+        self.button2.place(x=70, y=600)
+        self.button3.place(x=670, y=600)
+        # self.button4.place(x=520, y=460)
+        # self.button6.place(x=370, y=460)
+        self.text1.place(x=750, y=530, width=90, height=30)
+        self.text2.place(x=750, y=480, width=90, height=30)
+        self.text3.place(x=750, y=430, width=90, height=30)
         self.text_img1.place(x=65, y=90)
-        self.text_img2.place(x=500, y=90)
+        self.text_img2.place(x=600, y=90)
 
         #   FOCUS ON PATIENT ID
         self.text1.focus_set()
@@ -188,14 +196,14 @@ class App:
             title="Select image",
             filetypes=(
                 ("DICOM", "*.dcm"),
-                ("JPEG", "*.jpeg"),
-                ("jpg files", "*.jpg"),
-                ("png files", "*.png"),
+                # ("JPEG", "*.jpeg"),
+                # ("jpg files", "*.jpg"),
+                # ("png files", "*.png"),
             ),
         )
         if filepath:
             self.array, img2show = read_dicom_file(filepath)
-            self.img1 = img2show.resize((250, 250), Image.ANTIALIAS)
+            self.img1 = img2show.resize((250, 250), Image.LANCZOS)
             self.img1 = ImageTk.PhotoImage(self.img1)
             self.text_img1.image_create(END, image=self.img1)
             self.button1["state"] = "enabled"
@@ -203,7 +211,7 @@ class App:
     def run_model(self):
         self.label, self.proba, self.heatmap = predict(self.array)
         self.img2 = Image.fromarray(self.heatmap)
-        self.img2 = self.img2.resize((250, 250), Image.ANTIALIAS)
+        self.img2 = self.img2.resize((250, 250), Image.LANCZOS)
         self.img2 = ImageTk.PhotoImage(self.img2)
         print("OK")
         self.text_img2.image_create(END, image=self.img2)
