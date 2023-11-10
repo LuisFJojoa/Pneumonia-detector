@@ -4,10 +4,10 @@ RUN apt-get update
 
 WORKDIR /home/src
 
-COPY . ./
+COPY . .
 
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install -r pneumonia_detector/requirements.txt
 
 # Container cleaning to reduce size
 RUN apt-get autoremove -y && \
@@ -17,4 +17,4 @@ RUN apt-get autoremove -y && \
 #Command to execute in terminal
 #docker build -t pneumonia_detector . 
 
-# CMD ["python", "pneumonia_detector/main.py"]
+CMD ["python", "pneumonia_detector/main.py"]
