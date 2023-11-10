@@ -1,7 +1,6 @@
-FROM python:latest
+FROM python:3.10.13
 
-RUN apt-get update -y && \
-    apt-get install python3-opencv -y 
+RUN apt-get update
 
 WORKDIR /home/src
 
@@ -10,7 +9,12 @@ COPY . ./
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-#linea para ejecutar en el terminarl
-#docker build -t img_neumonia . 
+# Container cleaning to reduce size
+RUN apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-CMD ["python", "neumonia/app.py"]
+#Command to execute in terminal
+#docker build -t pneumonia_detector . 
+
+CMD ["python", "pneumonia_detector/main.py"]

@@ -1,8 +1,6 @@
-import csv
-import tkcap
-
 from tkinter.messagebox import showinfo
 from PIL import ImageTk, Image
+from utils import create_pdf_file, create_csv
 from tkinter import END
 
 
@@ -11,6 +9,7 @@ class App:
         self.image_processor = image_processor
         self.model_strategy = model_strategy
         self.grad_cam = grad_cam
+        self.reportID = 1
 
     def run_model(self, gui):
         self.label, self.proba, self.heatmap = self.model_strategy.predict(gui.array)
@@ -25,20 +24,11 @@ class App:
         gui.button6["state"] = "enabled"
 
     def create_csv(self):
-        with open("historial.csv", "a") as csvfile:
-            w = csv.writer(csvfile, delimiter="-")
-            w.writerow(
-                [self.text1.get(), self.label, "{:.2f}".format(self.proba) + "%"]
-            )
-            showinfo(title="Save", message="Data saved succesfully.")
+        data = [self.reportID, self.label, "{:.2f}".format(self.proba) + "%"]
+        create_csv(data)
+        showinfo(title="Save", message="Data saved succesfully.")
 
-    def create_pdf(self):
-        cap = tkcap.CAP(self.root)
-        ID = "Report" + str(self.reportID) + ".jpg"
-        img = cap.capture(ID)
-        img = Image.open(ID)
-        img = img.convert("RGB")
-        pdf_path = r"Report" + str(self.reportID) + ".pdf"
-        img.save(pdf_path)
+    def create_pdf(self, root):
         self.reportID += 1
+        create_pdf_file(self, root)
         showinfo(title="PDF", message="PDF generated succesfully.")
