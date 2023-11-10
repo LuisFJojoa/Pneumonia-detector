@@ -17,4 +17,4 @@ RUN apt-get autoremove -y && \
 #Command to execute in terminal
 #docker build -t pneumonia_detector . 
 
-CMD ["python", "pneumonia_detector/main.py"]
+# CMD ["python", "pneumonia_detector/main.py"]
