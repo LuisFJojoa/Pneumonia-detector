@@ -12,11 +12,6 @@ class App:
         self.model_strategy = model_strategy
         self.grad_cam = grad_cam
 
-    #   METHODS
-    def preprocess_image(self, array):
-        processed_array = self.image_processor.preprocess(array)
-        return processed_array
-
     def run_model(self, gui):
         self.label, self.proba, self.heatmap = self.model_strategy.predict(gui.array)
         gui.img2 = Image.fromarray(self.heatmap)
@@ -26,8 +21,10 @@ class App:
         gui.text_img2.image_create(END, image=gui.img2)
         gui.text2.insert(END, self.label)
         gui.text3.insert(END, "{:.2f}".format(self.proba) + "%")
-    
-    def save_results_csv(self):
+        gui.button4["state"] = "enabled"
+        gui.button6["state"] = "enabled"
+
+    def create_csv(self):
         with open("historial.csv", "a") as csvfile:
             w = csv.writer(csvfile, delimiter="-")
             w.writerow(
