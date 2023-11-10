@@ -14,19 +14,19 @@ tf.compat.v1.experimental.output_all_intermediates(True)
 
 class GradCAM:
 
-    def __init__(self, image_processor):
+    def __init__(self, image_processor, model):
         self.image_processor = image_processor
+        self.model = model
 
     def generate_heatmap(self, array):
         img = self.image_processor.preprocess(array)
-        model = tf.keras.models.load_model('../conv_MLP_84.h5')
-        preds = model.predict(img)
+        preds = self.model.predict(img)
         argmax = np.argmax(preds[0])
-        output = model.output[:, argmax]
-        last_conv_layer = model.get_layer("conv10_thisone")
+        output = self.model.output[:, argmax]
+        last_conv_layer = self.model.get_layer("conv10_thisone")
         grads = K.gradients(output, last_conv_layer.output)[0]
         pooled_grads = K.mean(grads, axis=(0, 1, 2))
-        iterate = K.function([model.input], [pooled_grads, last_conv_layer.output[0]])
+        iterate = K.function([self.model.input], [pooled_grads, last_conv_layer.output[0]])
         pooled_grads_value, conv_layer_output_value = iterate(img)
         for filters in range(64):
             conv_layer_output_value[:, :, filters] *= pooled_grads_value[filters]
