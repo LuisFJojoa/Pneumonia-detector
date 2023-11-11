@@ -4,13 +4,13 @@ import tkcap
 from PIL import Image
 
 
-def create_pdf_file(self, root):
+def create_pdf_file(root, personal_id):
     cap = tkcap.CAP(root)
-    ID = "Report" + str(self.reportID) + ".jpg"
+    ID = "Report" + str(personal_id) + ".jpg"
     img = cap.capture(ID)
     img = Image.open(ID)
     img = img.convert("RGB")
-    pdf_path = r"Report" + str(self.reportID) + ".pdf"
+    pdf_path = r"Report" + str(personal_id) + ".pdf"
     img.save(pdf_path)
     return pdf_path
 

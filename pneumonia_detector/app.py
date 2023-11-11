@@ -14,7 +14,7 @@ class App:
     def run_model(self, gui):
         self.label, self.proba, self.heatmap = self.model_strategy.predict(gui.array)
         gui.new_image = Image.fromarray(self.heatmap)
-        gui.new_image = gui.new_image.resize((250, 250), Image.LANCZOS)
+        gui.new_image = gui.new_image.resize((310, 310), Image.LANCZOS)
         gui.new_image = ImageTk.PhotoImage(gui.new_image)
         print("OK")
         gui.heatmap_image.image_create(END, image=gui.new_image)
@@ -29,7 +29,6 @@ class App:
         showinfo(title="Save", message="Data saved succesfully.")
 
     def create_pdf(self, root, personal_id):
-        self.reportID = personal_id
-        pdf_path = create_pdf_file(self, root)
+        pdf_path = create_pdf_file(root, personal_id)
         showinfo(title="PDF", message="PDF generated succesfully.")
         return pdf_path

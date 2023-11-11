@@ -120,7 +120,7 @@ class GUI:
 
             if filepath:
                 self.array, img_from_array = self.image_loader.load_image(filepath)
-                self.original_x_ray_image = img_from_array.resize((250, 250), Image.LANCZOS)
+                self.original_x_ray_image = img_from_array.resize((310, 310), Image.LANCZOS)
                 self.original_x_ray_image = ImageTk.PhotoImage(self.original_x_ray_image)
                 self.x_ray_image.image_create(END, image=self.original_x_ray_image)
                 self.predict_event["state"] = "enabled"
