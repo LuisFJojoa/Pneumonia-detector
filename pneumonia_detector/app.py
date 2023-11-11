@@ -30,5 +30,6 @@ class App:
 
     def create_pdf(self, root, personal_id):
         self.reportID = personal_id
-        create_pdf_file(self, root)
+        pdf_path = create_pdf_file(self, root)
         showinfo(title="PDF", message="PDF generated succesfully.")
+        return pdf_path

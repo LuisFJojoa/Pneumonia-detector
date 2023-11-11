@@ -1,3 +1,4 @@
+import os
 import cv2
 import pydicom
 import numpy as np
@@ -6,6 +7,8 @@ from PIL import Image
 
 
 class ImageLoader:
+    SUPPORTED_FORMATS = (".jpg", ".jpeg", ".dcm")
+    
     @staticmethod
     def load_image(path):
         _, ext = path.rsplit('.', 1)
@@ -17,6 +20,10 @@ class ImageLoader:
             return JPGImageReader().read(path)
         else:
             raise ValueError("Unsupported image format")
+
+    def is_supported_format(self, file_path):
+        _, file_extension = os.path.splitext(file_path)
+        return file_extension.lower() in self.SUPPORTED_FORMATS
 
 
 class DICOMReader:
@@ -44,7 +51,6 @@ class JPGImageReader:
 
 class ImageProcessor:
     def preprocess(self, array):
-        # Implementa el preprocesamiento de imágenes
         array = cv2.resize(array, (512, 512))
         array = cv2.cvtColor(array, cv2.COLOR_BGR2GRAY)
         clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(4, 4))
