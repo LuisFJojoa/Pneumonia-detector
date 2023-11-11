@@ -16,79 +16,104 @@ Aplicación de una técnica de explicación llamada Grad-CAM para resaltar con u
 
 ---
 
+## Arquitectura de archivos propuesta.
+
+### main.py
+
+Es la entrada principal del proyecto, se encarga de inicializar todas las instancias necesarias para el correcto funcionamiento de la aplicación. Es aquí donde se lee el archivo binario del modelo de red neuronal convolucional previamente entrenado llamado 'conv_MLP_84.h5'.
+
+### app.py
+
+Contiene la lógica de la aplicación. Se encarga de correr el modelo de predicción y crear los archivos CSV y PDF correspondientes a la predicción realizada.
+
+### gui.py
+
+Contiene el diseño de la interfaz gráfica utilizando Tkinter. Los botones llaman métodos contenidos en otros scripts.
+
+### image.py
+
+Se tiene la clase ImageLoader que permite cargar la imagen desde el ordenador, identificar que formato tiene dicha imagen y con base en ello realiza un proceso de lectura acorde al formato. Adicionalmente, permite validar si un formato de imagen es valido o no y realizar el pre-procesamiento de la imagen que se utilizará para el modelo de predicción. Para esto último se tienen encuenta los siguientes pasos:
+
+- Resize a 512x512
+- conversión a escala de grises
+- ecualización del histograma con CLAHE
+- normalización de la imagen entre 0 y 1
+- conversión del arreglo de imagen a formato de batch (tensor)
+
+### grad_cam.py
+
+Script que recibe la imagen y la procesa.
+
+### ia_model.py
+
+Script que aplicando el modelo gradCAM obtiene la predicción y la capa convolucional de interés para obtener las características relevantes de la imagen
+como la etiqueta, el heatmap y la probabilidad.
+
+### utils.py
+
+Script que contiene métodos utilizados dentro de la aplicación y se separan de la GUI con el fin de reducir el acople e incrementar cohesión. Dichos métodos sirven para crear o editar el archivo CSV con los nuevos datos y generar un archivo PDF con la evidencia encontrada después de realizar la predicción.
+
+---
+
 ## Uso de la herramienta:
 
 A continuación le explicaremos cómo empezar a utilizarla.
 
 Requerimientos necesarios para el funcionamiento:
 
-- Instale Anaconda para Windows siguiendo las siguientes instrucciones:
-  https://docs.anaconda.com/anaconda/install/windows/
+### Funcionamiento local para Mac/Linux/Windows:
 
-- Abra Anaconda Prompt y ejecute las siguientes instrucciones:
+- Instale Anaconda siguiendo las siguientes instrucciones (Seleccione su sistema operativo):
+  https://docs.anaconda.com/anaconda/install/
 
-  conda create -n tf tensorflow
+- Si tiene windows abra Anaconda Prompt (En macOS o Linux lo puede hacer directamente en la terminar) y ejecute las siguientes instrucciones:
 
+  cd ruta/proyecto/local por ejemplo cd C:\Users\user\\Desktop\Neumonia_proyecto\pneumonia_detector\pneumonia_detector
+
+  ````conda create -n tf tensorflow
   conda activate tf
+  pip install -r requirements.txt```
 
-  cd UAO-Neumonia
+  ````
 
-  pip install -r requirements.txt
+- Para realizar las pruebas unitarias ejecute la siguiente instrucción:
 
-  python detector_neumonia.py
+  `pytest test/nombre_de_test (cambie el 'nombre_de_test' por cualquiera de los tres test que se encuentran dentro de la carpeta)`
+
+- Para levantar la aplicación y desplegar la interfaz ejecute la siguiente instrucción:
+
+  `python main.py`
 
 Uso de la Interfaz Gráfica:
 
-- Ingrese la cédula del paciente en la caja de texto
-- Presione el botón 'Cargar Imagen', seleccione la imagen del explorador de archivos del computador (Imagenes de prueba en https://drive.google.com/drive/folders/1WOuL0wdVC6aojy8IfssHcqZ4Up14dy0g?usp=drive_link)
-- Presione el botón 'Predecir' y espere unos segundos hasta que observe los resultados
-- Presione el botón 'Guardar' para almacenar la información del paciente en un archivo excel con extensión .csv
-- Presione el botón 'PDF' para descargar un archivo PDF con la información desplegada en la interfaz
-- Presión el botón 'Borrar' si desea cargar una nueva imagen
+- Ingrese la cédula del paciente en el campo "Personal ID"
+- Presione el botón 'Load X Ray Image', seleccione la imagen del explorador de archivos del computador (Las imágenes de prueba están dentro de este proyecto en la carpeta volumes)
+- Presione el botón 'Predict' y espere unos segundos hasta que observe los resultados.
+- Presione el botón 'Save CSV File' para almacenar la información del paciente en un archivo excel con extensión .csv
+- Presione el botón 'Download Pdf' para descargar un archivo PDF con la información desplegada en la interfaz
+- Presión el botón 'Clear data' para limpiar la interfaz y cargar una nueva imagen
 
 ---
 
-## Arquitectura de archivos propuesta.
+### Funcionamiento para contenedor haciendo uso de Docker:
 
-## detector_neumonia.py
-
-Contiene el diseño de la interfaz gráfica utilizando Tkinter.
-
-Los botones llaman métodos contenidos en otros scripts.
-
-## integrator.py
-
-Es un módulo que integra los demás scripts y retorna solamente lo necesario para ser visualizado en la interfaz gráfica.
-Retorna la clase, la probabilidad y una imagen el mapa de calor generado por Grad-CAM.
-
-## read_img.py
-
-Script que lee la imagen en formato DICOM para visualizarla en la interfaz gráfica. Además, la convierte a arreglo para su preprocesamiento.
-
-## preprocess_img.py
-
-Script que recibe el arreglo proveniento de read_img.py, realiza las siguientes modificaciones:
-
-- resize a 512x512
-- conversión a escala de grises
-- ecualización del histograma con CLAHE
-- normalización de la imagen entre 0 y 1
-- conversión del arreglo de imagen a formato de batch (tensor)
-
-## load_model.py
-
-Script que lee el archivo binario del modelo de red neuronal convolucional previamente entrenado llamado 'WilhemNet86.h5'.
-
-## grad_cam.py
-
-Script que recibe la imagen y la procesa, carga el modelo, obtiene la predicción y la capa convolucional de interés para obtener las características relevantes de la imagen.
-
----
+- Instale la aplicación xming (Para windows) o xquartz (Para macOS), cualquiera de estos es un servicio de aplicaciones gráficas. Permite ejecutar gráficamente cualquier aplicación desde un ordenador con Windows accediendo de forma remota a un sistema Linux, por ejemplo a través de un cliente SSH. Esto permite que se conecte con docker para usarse como pantalla y visualizar el contenido que requiera de esta.
+- Descargue Docker-desktop en [mac](https://docs.docker.com/docker-for-mac/install/#download-docker-for-mac) o [windows](https://docs.docker.com/docker-for-windows/install/#download-docker-for-windows)
+- Abra la aplicación Docker Desktop
+- Abra la aplicación xming o xquartz
+- dirijase a la ruta del proyecto cd ruta/proyecto/local y asegurese de que está en la ruta donde se encuentra el archido Dockerfile
+- Ejecute el siguiente comando `docker build -t pneumonia_detector .`
+- Una vez termine el proceso, en Docker Desktop en la pestaña images encontrará la imagen creada con el nombre _pneumonia_detector_
+- Ejecute el siguiente comando `docker run -it --rm -e DISPLAY=host.docker.internal:0.0 -v "%cd%"/volumes:/home/volumes pneumonia_detector`
+- Dirigite nuevamente a Docker Desktop y abre el contenedor que se acaba de levantar
+- Clic en la pestaña Terminal
+- Entra a la carpeta `cd pneumonia_detector`
+- Ejecuta el siguiente comando para realizar los test `pytest test/nombre/de/test.py/`
+- Ejecuta el siguiente comando para levantar la aplicación en el contenedor `python main.py`
 
 ## Acerca del Modelo
 
-La red neuronal convolucional implementada (CNN) es basada en el modelo implementado por F. Pasa, V.Golkov, F. Pfeifer, D. Cremers & D. Pfeifer
-en su artículo Efcient Deep Network Architectures for Fast Chest X-Ray Tuberculosis Screening and Visualization.
+La red neuronal convolucional implementada (CNN) es basada en el modelo implementado por F. Pasa, V.Golkov, F. Pfeifer, D. Cremers & D. Pfeifer en su artículo Efcient Deep Network Architectures for Fast Chest X-Ray Tuberculosis Screening and Visualization.
 
 Está compuesta por 5 bloques convolucionales, cada uno contiene 3 convoluciones; dos secuenciales y una conexión 'skip' que evita el desvanecimiento del gradiente a medida que se avanza en profundidad.
 Con 16, 32, 48, 64 y 80 filtros de 3x3 para cada bloque respectivamente.
