@@ -86,8 +86,8 @@ class GUI:
         self.accuracy_text.place(x=750, y=480, width=90, height=30)
         self.result_text.place(x=750, y=430, width=90, height=30)
 
-        self.x_ray_image.place(x=65, y=90)
-        self.heatmap_image.place(x=600, y=90)
+        self.x_ray_image.place(x=65, y=90,  width=310, height=310)
+        self.heatmap_image.place(x=600, y=90,  width=310, height=310)
 
         self.personal_id_text.focus_set()
         self.array = None
