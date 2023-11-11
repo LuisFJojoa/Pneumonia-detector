@@ -18,19 +18,35 @@ Aplicación de una técnica de explicación llamada Grad-CAM para resaltar con u
 
 ## Arquitectura de archivos propuesta.
 
-### main.py
+### pneumonia_dectector
+
+Carpeta que contiene todos los archivos para levantar la aplicación.
+
+### test
+
+Carpeta que contiene tres pruebas unitarias
+
+- test_create_pdf.py : Evalua si un archivo pdf es creado correctamente
+- test_image.pY : Evalua si los formatos de los archivos entregados si son soportados o no
+- test_personal_id.py :  Evalua que el campo Personal_ID tenga contenido para poder realizar el modelo de predicción
+
+### volumes
+
+Carpeta que contiene las imágenes para ser usadas principalmente dentro del contenedor de Docker y evaluar que la aplicación funcione correctamente.
+
+### pneumonia_dectector/main.py
 
 Es la entrada principal del proyecto, se encarga de inicializar todas las instancias necesarias para el correcto funcionamiento de la aplicación. Es aquí donde se lee el archivo binario del modelo de red neuronal convolucional previamente entrenado llamado 'conv_MLP_84.h5'.
 
-### app.py
+### pneumonia_dectector/app.py
 
 Contiene la lógica de la aplicación. Se encarga de correr el modelo de predicción y crear los archivos CSV y PDF correspondientes a la predicción realizada.
 
-### gui.py
+### pneumonia_dectector/gui.py
 
 Contiene el diseño de la interfaz gráfica utilizando Tkinter. Los botones llaman métodos contenidos en otros scripts.
 
-### image.py
+### pneumonia_dectector/image.py
 
 Se tiene la clase ImageLoader que permite cargar la imagen desde el ordenador, identificar que formato tiene dicha imagen y con base en ello realiza un proceso de lectura acorde al formato. Adicionalmente, permite validar si un formato de imagen es valido o no y realizar el pre-procesamiento de la imagen que se utilizará para el modelo de predicción. Para esto último se tienen encuenta los siguientes pasos:
 
@@ -40,16 +56,16 @@ Se tiene la clase ImageLoader que permite cargar la imagen desde el ordenador, i
 - normalización de la imagen entre 0 y 1
 - conversión del arreglo de imagen a formato de batch (tensor)
 
-### grad_cam.py
+### pneumonia_dectector/grad_cam.py
 
 Script que recibe la imagen y la procesa.
 
-### ia_model.py
+### pneumonia_dectector/ia_model.py
 
 Script que aplicando el modelo gradCAM obtiene la predicción y la capa convolucional de interés para obtener las características relevantes de la imagen
 como la etiqueta, el heatmap y la probabilidad.
 
-### utils.py
+### pneumonia_dectector/utils.py
 
 Script que contiene métodos utilizados dentro de la aplicación y se separan de la GUI con el fin de reducir el acople e incrementar cohesión. Dichos métodos sirven para crear o editar el archivo CSV con los nuevos datos y generar un archivo PDF con la evidencia encontrada después de realizar la predicción.
 
