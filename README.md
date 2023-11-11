@@ -1,6 +1,6 @@
 ## Curso - Desarrollo de proyectos de IA
 
-Entrega preliminar a cargo de Luis Fernando Jojoa Quintero
+Entrega final proyecto módulo 1 a cargo de Luis Fernando Jojoa Quintero
 
 ## Hola! Bienvenido a la herramienta para la detección rápida de neumonía
 
@@ -10,7 +10,7 @@ Deep Learning aplicado en el procesamiento de imágenes radiográficas de tórax
 
 2. Neumonía Viral
 
-3. Sin Neumonía
+3. Sin Neumonía (Normal)
 
 Aplicación de una técnica de explicación llamada Grad-CAM para resaltar con un mapa de calor las regiones relevantes de la imagen de entrada.
 
@@ -57,16 +57,16 @@ Script que contiene métodos utilizados dentro de la aplicación y se separan de
 
 ## Uso de la herramienta:
 
-A continuación le explicaremos cómo empezar a utilizarla.
+A continuación se explicar cómo empezar a utilizarla.
 
 Requerimientos necesarios para el funcionamiento:
 
 ### Funcionamiento local para Mac/Linux/Windows:
 
-- Instale Anaconda siguiendo las siguientes instrucciones (Seleccione su sistema operativo):
+- Instale Anaconda (Seleccione su sistema operativo):
   https://docs.anaconda.com/anaconda/install/
 
-- Si tiene windows abra Anaconda Prompt (En macOS o Linux lo puede hacer directamente en la terminar) y ejecute las siguientes instrucciones:
+- Si tiene windows abra Anaconda Prompt (En macOS o Linux lo puede hacer directamente en la terminal) y ejecute las siguientes instrucciones:
 
   cd ruta/proyecto/local por ejemplo cd C:\Users\user\\Desktop\Neumonia_proyecto\pneumonia_detector\pneumonia_detector
 
