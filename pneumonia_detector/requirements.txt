@@ -2,7 +2,7 @@ pyautogui
 pillow
 tkcap
 pydicom
-new_imagepdf
+img2pdf
 opencv_python
 matplotlib
 pandas
