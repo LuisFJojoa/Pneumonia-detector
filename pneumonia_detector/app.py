@@ -23,12 +23,12 @@ class App:
         gui.button4["state"] = "enabled"
         gui.button6["state"] = "enabled"
 
-    def create_csv(self):
-        data = [self.reportID, self.label, "{:.2f}".format(self.proba) + "%"]
+    def create_csv(self, personal_id):
+        data = [personal_id, self.label, "{:.2f}".format(self.proba) + "%"]
         create_csv(data)
         showinfo(title="Save", message="Data saved succesfully.")
 
-    def create_pdf(self, root):
-        self.reportID += 1
+    def create_pdf(self, root, personal_id):
+        self.reportID = personal_id
         create_pdf_file(self, root)
         showinfo(title="PDF", message="PDF generated succesfully.")
