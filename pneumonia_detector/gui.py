@@ -5,7 +5,7 @@ from tkinter import Tk, ttk, font, Text, filedialog, END
 from tkinter.messagebox import askokcancel, showinfo, WARNING
 from PIL import ImageTk, Image
 
-current_dir = os.path.dirname(os.path.realpath(__file__), '../../volumes')
+current_dir = os.path.dirname(os.path.realpath(__file__))
 images_dir = os.path.join(os.path.dirname(os.path.dirname(current_dir)), "volumes")
                                     
 filetypes = (
