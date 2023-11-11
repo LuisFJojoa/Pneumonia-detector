@@ -5,7 +5,8 @@ from tkinter import Tk, ttk, font, Text, filedialog, END
 from tkinter.messagebox import askokcancel, showinfo, WARNING
 from PIL import ImageTk, Image
 
-project_directory = os.path.dirname(os.path.realpath(__file__))
+current_dir = os.path.dirname(os.path.realpath(__file__), '../../volumes')
+images_dir = os.path.join(os.path.dirname(os.path.dirname(current_dir)), "volumes")
                                     
 filetypes = (
     ("DICOM", "*.dcm"),
@@ -96,7 +97,7 @@ class GUI:
 
     def load_image(self):
         filepath = filedialog.askopenfilename(
-            initialdir=project_directory,
+            initialdir=images_dir,
             title="Select image",
             filetypes=filetypes,
         )
