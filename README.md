@@ -70,17 +70,23 @@ Requerimientos necesarios para el funcionamiento:
 
   cd ruta/proyecto/local por ejemplo cd C:\Users\user\\Desktop\Neumonia_proyecto\pneumonia_detector\pneumonia_detector
 
-  ```conda create -n tf tensorflow
+  ```
+  conda create -n tf tensorflow
   conda activate tf
-  pip install -r requirements.txt```
+  pip install -r requirements.txt
+  ```
 
 - Para realizar las pruebas unitarias ejecute la siguiente instrucción (cambie el 'nombre_de_test' por cualquiera de los tres test que se encuentran dentro de la carpeta):
 
-  ```pytest test/nombre_de_test```
+  ```
+  pytest test/nombre_de_test
+  ```
 
 - Para levantar la aplicación y desplegar la interfaz ejecute la siguiente instrucción:
 
-  ```python main.py```
+  ```
+  python main.py
+  ```
 
 Uso de la Interfaz Gráfica:
 
@@ -100,14 +106,29 @@ Uso de la Interfaz Gráfica:
 - Abra la aplicación Docker Desktop
 - Abra la aplicación xming o xquartz
 - dirijase a la ruta del proyecto cd ruta/proyecto/local y asegurese de que está en la ruta donde se encuentra el archido Dockerfile
-- Ejecute el siguiente comando ```docker build -t pneumonia_detector .```
+- Ejecute el siguiente comando
+  ```
+  docker build -t pneumonia_detector .
+  ```
 - Una vez termine el proceso, en Docker Desktop en la pestaña images encontrará la imagen creada con el nombre _pneumonia_detector_
-- Ejecute el siguiente comando ```docker run -it --rm -e DISPLAY=host.docker.internal:0.0 -v "%cd%"/volumes:/home/volumes pneumonia_detector```
+- Ejecute el siguiente comando
+  ```
+  docker run -it --rm -e DISPLAY=host.docker.internal:0.0 -v "%cd%"/volumes:/home/volumes pneumonia_detector
+  ```
 - Dirigite nuevamente a Docker Desktop y abre el contenedor que se acaba de levantar
 - Clic en la pestaña Terminal
-- Entra a la carpeta ```cd pneumonia_detector```
-- Ejecuta el siguiente comando para realizar los test ```pytest test/nombre/de/test.py/```
-- Ejecuta el siguiente comando para levantar la aplicación en el contenedor ```python main.py```
+- Entra a la carpeta
+  ```
+  cd pneumonia_detector
+  ```
+- Ejecuta el siguiente comando para realizar los test
+  ```
+  pytest test/nombre/de/test.py
+  ```
+- Ejecuta el siguiente comando para levantar la aplicación en el contenedor
+  ```
+  python main.py
+  ```
 
 ## Acerca del Modelo
 
