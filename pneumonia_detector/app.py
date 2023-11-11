@@ -13,15 +13,15 @@ class App:
 
     def run_model(self, gui):
         self.label, self.proba, self.heatmap = self.model_strategy.predict(gui.array)
-        gui.img2 = Image.fromarray(self.heatmap)
-        gui.img2 = gui.img2.resize((250, 250), Image.LANCZOS)
-        gui.img2 = ImageTk.PhotoImage(gui.img2)
+        gui.new_image = Image.fromarray(self.heatmap)
+        gui.new_image = gui.new_image.resize((250, 250), Image.LANCZOS)
+        gui.new_image = ImageTk.PhotoImage(gui.new_image)
         print("OK")
-        gui.text_img2.image_create(END, image=gui.img2)
-        gui.text2.insert(END, self.label)
-        gui.text3.insert(END, "{:.2f}".format(self.proba) + "%")
-        gui.button4["state"] = "enabled"
-        gui.button6["state"] = "enabled"
+        gui.heatmap_image.image_create(END, image=gui.new_image)
+        gui.accuracy_text.insert(END, self.label)
+        gui.result_text.insert(END, "{:.2f}".format(self.proba) + "%")
+        gui.download_pdf_event["state"] = "enabled"
+        gui.create_csv_event["state"] = "enabled"
 
     def create_csv(self, personal_id):
         data = [personal_id, self.label, "{:.2f}".format(self.proba) + "%"]

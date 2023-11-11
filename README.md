@@ -57,7 +57,7 @@ Script que contiene métodos utilizados dentro de la aplicación y se separan de
 
 ## Uso de la herramienta:
 
-A continuación se explicar cómo empezar a utilizarla.
+A continuación se explica cómo empezar a utilizar la herramienta.
 
 Requerimientos necesarios para el funcionamiento:
 

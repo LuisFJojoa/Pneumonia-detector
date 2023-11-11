@@ -8,7 +8,7 @@ from PIL import Image
 
 class ImageLoader:
     SUPPORTED_FORMATS = (".jpg", ".jpeg", ".dcm")
-    
+
     @staticmethod
     def load_image(path):
         _, ext = path.rsplit('.', 1)
@@ -30,23 +30,23 @@ class DICOMReader:
     def read(self, path):
         img = pydicom.dcmread(path)
         img_array = img.pixel_array
-        img2show = Image.fromarray(img_array)
-        img2 = img_array.astype(float)
-        img2 = (np.maximum(img2, 0) / img2.max()) * 255.0
-        img2 = np.uint8(img2)
-        img_RGB = cv2.cvtColor(img2, cv2.COLOR_GRAY2RGB)
-        return img_RGB, img2show
+        img_from_array = Image.fromarray(img_array)
+        new_image = img_array.astype(float)
+        new_image = (np.maximum(new_image, 0) / new_image.max()) * 255.0
+        new_image = np.uint8(new_image)
+        img_RGB = cv2.cvtColor(new_image, cv2.COLOR_GRAY2RGB)
+        return img_RGB, img_from_array
 
 
 class JPGImageReader:
     def read(self, path):
         img = cv2.imread(path)
         img_array = np.asarray(img)
-        img2show = Image.fromarray(img_array)
-        img2 = img_array.astype(float)
-        img2 = (np.maximum(img2, 0) / img2.max()) * 255.0
-        img2 = np.uint8(img2)
-        return img2, img2show
+        img_from_array = Image.fromarray(img_array)
+        new_image = img_array.astype(float)
+        new_image = (np.maximum(new_image, 0) / new_image.max()) * 255.0
+        new_image = np.uint8(new_image)
+        return new_image, img_from_array
 
 
 class ImageProcessor:

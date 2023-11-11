@@ -30,6 +30,7 @@ class GradCAM:
         pooled_grads_value, conv_layer_output_value = iterate(img)
         for filters in range(64):
             conv_layer_output_value[:, :, filters] *= pooled_grads_value[filters]
+
         # creating the heatmap
         heatmap = np.mean(conv_layer_output_value, axis=-1)
         heatmap = np.maximum(heatmap, 0)  # ReLU
@@ -38,13 +39,13 @@ class GradCAM:
         superimposed_img = self.overlay_heatmap(heatmap, array)
         return superimposed_img 
 
-    def overlay_heatmap(self, heatmap, array, alpha=0.8):
+    def overlay_heatmap(self, heatmap, array):
         heatmap = np.uint8(255 * heatmap)
         heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
-        img2 = cv2.resize(array, (512, 512))
+        new_image = cv2.resize(array, (512, 512))
         hif = 0.8
         transparency = heatmap * hif
         transparency = transparency.astype(np.uint8)
-        superimposed_img = cv2.add(transparency, img2)
+        superimposed_img = cv2.add(transparency, new_image)
         superimposed_img = superimposed_img.astype(np.uint8)
         return superimposed_img[:, :, ::-1]
